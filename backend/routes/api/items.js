@@ -154,6 +154,7 @@ router.post("/", auth.required, function(req, res, next) {
       item = req.body.item;
 
       //Adding API KEY to generate new image
+      console.log(process.env.OPENAI_API_KEY);
 
       const response = await openai.createImage({
         prompt: item.title,
