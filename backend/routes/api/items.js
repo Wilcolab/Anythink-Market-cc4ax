@@ -151,20 +151,20 @@ router.post("/", auth.required, function(req, res, next) {
       if (!user) {
         return res.sendStatus(401);
       }
-      var item = req.body.item;
+      var newitem = req.body.item;
 
       //Adding API KEY to generate new image
 
       const response = await openai.createImage({
-        prompt: item.title,
+        prompt: newitem.title,
         n: 1,
         size: "256x256",
       });
       var image_url = response.data.data[0].url;
      
-      item.image = image_url;
+      newitem.image = image_url;
      
-      var item = new Item(item);
+      var item = new Item(newitem);
 
       item.seller = user;
 
