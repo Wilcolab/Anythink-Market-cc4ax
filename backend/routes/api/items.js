@@ -159,7 +159,7 @@ router.post("/", auth.required, function(req, res, next) {
       const response = await openai.createImage({
         prompt: item.title,
         n: 1,
-        size: "1024x1024",
+        size: "256x256",
       });
       image_url = response.data.data[0].url;
       console.log(response);
