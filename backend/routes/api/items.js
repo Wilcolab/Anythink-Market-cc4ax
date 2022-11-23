@@ -9,7 +9,7 @@ const { sendEvent } = require("../../lib/event");
 
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: "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",
 });
 const openai = new OpenAIApi(configuration);
 
