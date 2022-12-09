@@ -28,6 +28,7 @@
     "methods": "1.1.2",
     "mongoose": "5.12.5",
     "mongoose-unique-validator": "^3.0.0",
+    "mongoose-seed":"*",
     "morgan": "1.7.0",
     "passport": "0.3.2",
     "passport-local": "1.0.0",
