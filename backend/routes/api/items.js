@@ -146,11 +146,10 @@ router.post("/", auth.required, function(req, res, next) {
 
       var item = new Item(req.body.item);
       //Assign a placeholder image if none is provided
-      if(item.image == '' || !(image in item)) {
+      if(!item.hasOwnProperty(image)) {
         item.image = '/placeholder.png';
       };
 
-      ///workspaces/Anythink-Market-cc4ax/frontend/public/placeholder.png
       item.seller = user;
 
       return item.save().then(function() {
