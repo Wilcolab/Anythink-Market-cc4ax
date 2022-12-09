@@ -146,7 +146,7 @@ router.post("/", auth.required, function(req, res, next) {
 
       var item = new Item(req.body.item);
       //Assign a placeholder image if none is provided
-      if(item.image == '') {
+      if(item.image == '' || !(image in item)) {
         item.image = '/placeholder.png';
       };
 
