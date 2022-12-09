@@ -21,7 +21,7 @@ const users = [];
 const items = [];
 const comments = [];
 
-for (const i = 0; i < 105; i++) {
+for (var i = 0; i < 105; i++) {
   users.push({
     username: `username${i}`,
     email: `ex${i}@email.com`,
