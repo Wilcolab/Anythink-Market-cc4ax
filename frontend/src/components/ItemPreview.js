@@ -19,7 +19,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const ItemPreview = (props) => {
   const item = props.item;
-  if(!Object.prototype.hasOwnProperty.call(item, "image")) {
+  if(!props.item.image) {
     item.image = "/placeholder.png";
   }
   const handleClick = (ev) => {
