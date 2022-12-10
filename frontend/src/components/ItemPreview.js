@@ -18,12 +18,10 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const ItemPreview = (props) => {
-
   if(!props.item.image) {
-    props.item.image = "/placeholder.png"
+    props.item.image = '/placeholder.png';
   }
   const item = props.item;
-  
   const handleClick = (ev) => {
     ev.preventDefault();
     if (item.favorited) {
@@ -32,7 +30,6 @@ const ItemPreview = (props) => {
       props.favorite(item.slug);
     }
   };
-  
   return (
     <div
       className="card bg-dark border-light p-3"
