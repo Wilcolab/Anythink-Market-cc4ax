@@ -29,12 +29,10 @@ const ItemPreview = (props) => {
     }
   };
   let TOPSELLER;
-  if (Object.prototype.hasOwnProperty.call(item.seller, "isVerified")) {
-    if(item.seller.isVerified === true) {
-      TOPSELLER = <div className="flex-grow-1"><img alt="Verified Seller" src="/verified_seller.svg"/> TOP SELLER</div>;
-    }
+  if(item.seller.isVerified && item.seller.isVerified === true) {
+      TOPSELLER = <div id="item_verified_seller_item" className="item-footer"><img alt="Verified Seller" src="verified_seller.svg"/> TOP SELLER</div>;
   } else {
-    TOPSELLER = null;
+      TOPSELLER = null;
   }
   return (
     <div
