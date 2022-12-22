@@ -28,7 +28,14 @@ const ItemPreview = (props) => {
       props.favorite(item.slug);
     }
   };
-
+  let TOPSELLER;
+  if (Object.prototype.hasOwnProperty.call(item.seller, "isVerified")) {
+    if(item.seller.isVerified === true) {
+      TOPSELLER = <div className="flex-grow-1"><img alt="Verified Seller" src="/verified_seller.svg"/> TOP SELLER</div>;
+    }
+  } else {
+    TOPSELLER = null;
+  }
   return (
     <div
       className="card bg-dark border-light p-3"
@@ -54,6 +61,7 @@ const ItemPreview = (props) => {
               className="user-pic rounded-circle pr-1"
             />
           </Link>
+          {TOPSELLER}
           <button className="btn btn-outline-secondary" onClick={handleClick}>
             <i className="ion-heart"></i> {item.favoritesCount}
           </button>
