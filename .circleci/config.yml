@@ -2,11 +2,12 @@ version: 2.1
 
 jobs:
   build-and-test:
-    working_directory: ~/frontend
+    working_directory: ~/Anythink-Market-cc4ax/frontend
     docker:
       - image: cimg/node:16.18
     steps:
       - checkout
+          path: ~/Anythink-Market-cc4ax/
       - run:
           name: Install deps
           command: yarn install
