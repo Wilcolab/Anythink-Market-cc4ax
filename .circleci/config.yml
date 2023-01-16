@@ -6,8 +6,8 @@ jobs:
     docker:
       - image: cimg/node:16.18
     steps:
-      - checkout
-          path: ~/Anythink-Market-cc4ax/
+      - checkout:
+          path: ~/Anythink-Market-cc4ax
       - run:
           name: Install deps
           command: yarn install
