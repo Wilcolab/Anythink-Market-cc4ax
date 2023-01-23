@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  node: circleci/node@5.0
+  node: circleci/node@5.1.0
 jobs:
   build-and-test:
     executor: node/default
@@ -8,6 +8,9 @@ jobs:
     steps:
       - checkout:
           path: ~/market
+     - node/install:
+          install-yarn: true
+          node-version: '16.13'
       - node/install-packages:
           pkg-manager: yarn
       - run:
