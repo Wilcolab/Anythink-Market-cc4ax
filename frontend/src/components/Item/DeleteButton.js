@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import { DELETE_COMMENT } from "../../constants/actionTypes";
 
 const mapDispatchToProps = (dispatch) => ({
-  onClick: (payload, commentId) => dispatch({ type: DELETE_COMMENT, payload, commentId }),
+  onClick: (payload, commentId) =>
+    dispatch({ type: DELETE_COMMENT, payload, commentId }),
 });
 
 const DeleteButton = (props) => {
@@ -12,13 +13,11 @@ const DeleteButton = (props) => {
     const payload = agent.Comments.delete(props.slug, props.commentId);
     props.onClick(payload, props.commentId);
   };
+
   if (props.show) {
     return (
       <span className="mod-options">
-        <i 
-          className="ion-trash-a" 
-          onClick={del}
-        />
+        <i className="ion-trash-a" onClick={del}></i>
       </span>
     );
   }
