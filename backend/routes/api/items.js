@@ -327,6 +327,8 @@ router.delete("/:item/comments/:comment", auth.required, function(
       .then(function() {
         res.sendStatus(204);
       });
+  } else {
+     res.sendStatus(403);
   }
 });
 
