@@ -13,7 +13,6 @@ var itemsArray = []struct {
 	{ID: 2, Name: "Meteor Muffins"},
 	{ID: 3, Name: "Alien Antenna Kit"},
 	{ID: 4, Name: "Starlight Lantern"},
-	{ID: 5, Name: "Quantum Quill"},
 }
 
 func main() {
