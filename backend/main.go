@@ -29,6 +29,7 @@ func addItem(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	newItem.ID = len(itemsArray) + 1
 	itemsArray = append(itemsArray, newItem)
 	c.IndentedJSON(http.StatusOK, newItem)
 }
