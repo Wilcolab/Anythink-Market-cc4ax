@@ -16,7 +16,7 @@ func main() {
  
 func item(c *gin.Context) {
 	var itemsArray = [5]string{"Galactic Goggles","Meteor Muffins","Alien Antenna Kit","Starlight Lantern","Quantum Quill"}
-	c.JSON(http.StatusOK, gin.H{"items": itemsArray})
+	c.IndentedJSON(http.StatusOK, itemsArray)
 }
 func greet(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, "Welcome, Go navigator, to the Anythink cosmic catalog.")
