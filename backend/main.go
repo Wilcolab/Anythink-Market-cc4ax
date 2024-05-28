@@ -15,7 +15,16 @@ func main() {
 }
  
 func item(c *gin.Context) {
-	var itemsArray = [5]string{"Galactic Goggles","Meteor Muffins","Alien Antenna Kit","Starlight Lantern","Quantum Quill"}
+	var itemsArray = []struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	}{
+		{ID: 1, Name: "Galactic Goggles"},
+		{ID: 2, Name: "Meteor Muffins"},
+		{ID: 3, Name: "Alien Antenna Kit"},
+		{ID: 4, Name: "Starlight Lantern"},
+		{ID: 5, Name: "Quantum Quill"},
+	}
 	c.IndentedJSON(http.StatusOK, itemsArray)
 }
 func greet(c *gin.Context) {
