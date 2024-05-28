@@ -25,6 +25,7 @@ func main() {
 	router.POST("/items", addItem)
 	router.HEAD("/healthcheck", healthcheck)
 	router.GET("/items/:id", getItemByID)
+	router.GET("/items/popular", getPopularItems)
 	router.Run()
 }
 
@@ -68,4 +69,20 @@ func getItemByID(c *gin.Context) {
 		}
 	}
 	c.JSON(http.StatusNotFound, gin.H{"error": "item not found"})
+}
+//add a function /items/popular that returns the most viewed items
+func getPopularItems(c *gin.Context) {
+	var popularItem struct {
+		ID    int    `json:"id"`
+		Name  string `json:"name"`
+		Views int    `json:"views"`
+	}
+	maxViews := 0
+	for i := range itemsArray {
+		if itemsArray[i].Views > maxViews {
+			maxViews = itemsArray[i].Views
+			popularItem = itemsArray[i]
+		}
+	}
+	c.IndentedJSON(http.StatusOK, popularItem)
 }
