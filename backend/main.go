@@ -3,16 +3,19 @@ package main
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
+	"strconv" // Import the strconv package
 )
 
 var itemsArray = []struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Views int    `json:"views"`
 }{
-	{ID: 1, Name: "Galactic Goggles"},
-	{ID: 2, Name: "Meteor Muffins"},
-	{ID: 3, Name: "Alien Antenna Kit"},
-	{ID: 4, Name: "Starlight Lantern"},
+	{ID: 1, Name: "Galactic Goggles", Views: 0},
+	{ID: 2, Name: "Meteor Muffins", Views: 0},
+	{ID: 3, Name: "Alien Antenna Kit", Views: 0},
+	{ID: 4, Name: "Starlight Lantern", Views: 0},
+	{ID: 5, Name: "Comet Camera", Views: 0},
 }
 
 func main() {
@@ -21,14 +24,15 @@ func main() {
 	router.GET("/items", getItems)
 	router.POST("/items", addItem)
 	router.HEAD("/healthcheck", healthcheck)
-
+	router.GET("/items/:id", getItemByID)
 	router.Run()
 }
 
 func addItem(c *gin.Context) {
 	var newItem struct {
-		ID   int    `json:"id"`
-		Name string `json:"name"`
+		ID    int    `json:"id"`
+		Name  string `json:"name"`
+		Views int    `json:"views"`
 	}
 	if err := c.BindJSON(&newItem); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -50,4 +54,18 @@ func healthcheck(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": "ok",
 	})
+}
+
+func getItemByID(c *gin.Context) {
+	id := c.Param("id")
+	for i := range itemsArray {
+		if strconv.Itoa(itemsArray[i].ID) == id {
+			go func() {
+				itemsArray[i].Views++
+			}()
+				c.IndentedJSON(http.StatusOK, itemsArray[i])
+			return
+		}
+	}
+	c.JSON(http.StatusNotFound, gin.H{"error": "item not found"})
 }
