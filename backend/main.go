@@ -9,11 +9,33 @@ func main() {
 	router := gin.Default()
 	router.GET("/", greet)
 	router.GET("/items",item)
+	router.POST("/items",addItem)
 	router.HEAD("/healthcheck", healthcheck)
 
 	router.Run()
 }
- 
+ func addItem(c *gin.Context) {
+	var itemsArray = []struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	}{
+		{ID: 1, Name: "Galactic Goggles"},
+		{ID: 2, Name: "Meteor Muffins"},
+		{ID: 3, Name: "Alien Antenna Kit"},
+		{ID: 4, Name: "Starlight Lantern"},
+		{ID: 5, Name: "Quantum Quill"},
+	}
+	var newItem struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	}
+	if err := c.BindJSON(&newItem); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	itemsArray = append(itemsArray, newItem)
+	c.IndentedJSON(http.StatusOK, itemsArray)
+}
 func item(c *gin.Context) {
 	var itemsArray = []struct {
 		ID   int    `json:"id"`
