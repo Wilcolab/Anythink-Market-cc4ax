@@ -8,11 +8,16 @@ import (
 func main() {
 	router := gin.Default()
 	router.GET("/", greet)
+	router.GET("/items",item)
 	router.HEAD("/healthcheck", healthcheck)
 
 	router.Run()
 }
-
+ 
+func item(c *gin.Context) {
+	var itemsArray = [5]string{"Galactic Goggles","Meteor Muffins","Alien Antenna Kit","Starlight Lantern","Quantum Quill"}
+	c.JSON(http.StatusOK, gin.H{"items": itemsArray})
+}
 func greet(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, "Welcome, Go navigator, to the Anythink cosmic catalog.")
 }
