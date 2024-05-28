@@ -5,26 +5,41 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var itemsArray = []struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}{
+	{ID: 1, Name: "Galactic Goggles"},
+	{ID: 2, Name: "Meteor Muffins"},
+	{ID: 3, Name: "Alien Antenna Kit"},
+	{ID: 4, Name: "Starlight Lantern"},
+}
+
 func main() {
 	router := gin.Default()
 	router.GET("/", greet)
-	router.GET("/items",item)
+	router.GET("/items", getItems)
+	router.POST("/items", addItem)
 	router.HEAD("/healthcheck", healthcheck)
 
 	router.Run()
 }
- 
-func item(c *gin.Context) {
-	var itemsArray = []struct {
+
+func addItem(c *gin.Context) {
+	var newItem struct {
 		ID   int    `json:"id"`
 		Name string `json:"name"`
-	}{
-		{ID: 1, Name: "Galactic Goggles"},
-		{ID: 2, Name: "Meteor Muffins"},
-		{ID: 3, Name: "Alien Antenna Kit"},
-		{ID: 4, Name: "Starlight Lantern"},
-		{ID: 5, Name: "Quantum Quill"},
 	}
+	if err := c.BindJSON(&newItem); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	newItem.ID = len(itemsArray) + 1
+	itemsArray = append(itemsArray, newItem)
+	c.IndentedJSON(http.StatusOK, newItem)
+}
+
+func getItems(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, itemsArray)
 }
 func greet(c *gin.Context) {
