@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<head>
+	<title>Twitter Feed</title>
+	<style>
+        .banner-container {
+			border: 20px inset gray;
+			border-radius: 10px;
+			padding: 15px;
+            background-color: white;
+		}
+		.tweet-container {
+			border: 10px groove cyan;
+			border-radius: 20px;
+			padding: 15px;
+            background-color: blue;
+		}
+		.tweet-text {
+			font-size: 24px;
+			text-align: left;
+            color: aliceblue;
+		}
+		.tweet-timestamp {
+			font-size: 12px;
+			text-align: right;
+            color:yellow;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+        <div id="banner" class="banner-container">
+            <h1>Your Tweets</h1></div>
+		<div id="tweets"></div>
+	</div>
+	
+	<script>
+		$(document).ready(function() {
+            console.log("inside function");
+			$.getJSON('http://localhost:8080/v1/tweets')
+				.done(function(data) {
+                    console.log("Received " + data.length + " tweets...");
+					$.each(data, function(index, tweet) {
+                        // wtf is tweet text messed up
+                        console.log(tweet);
+						var tweetContainer = $('<div>').addClass('tweet-container');
+                        // var tweetText = $('<div>').addClass('tweet-text').text(tweet.tweetText);
+                        // hack - easier than fixing the API
+						var tweetText = $('<div>').addClass('tweet-text').text(JSON.parse(tweet.tweetText).tweetText);
+						var tweetTimestamp = $('<div>').addClass('tweet-timestamp').text(tweet.tweetedAt);
+						tweetContainer.append(tweetText).append(tweetTimestamp);
+						$('#tweets').append(tweetContainer);
+					});
+				})
+		});
+	</script>
+</body>
+</html>

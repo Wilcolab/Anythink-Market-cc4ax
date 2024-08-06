@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <books id="1" author="Author Test" title="Sample Book" year="2020"/>
+</dataset>
