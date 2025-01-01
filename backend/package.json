@@ -16,7 +16,7 @@
     "axios": "^1.7.9",
     "body-parser": "1.15.0",
     "cors": "2.7.1",
-    "dotenv": "^8.2.0",
+    "dotenv": "^16.4.7",
     "ejs": "2.4.1",
     "errorhandler": "1.4.3",
     "express": "4.13.4",
