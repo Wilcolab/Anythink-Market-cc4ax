@@ -10,6 +10,9 @@ export class User {
 
   @Column()
   lastName: string;
+  
+  @Column()
+  birthday: string;
 
   @Column({ unique: true })
   email: string;
