@@ -58,8 +58,12 @@ async def secure_query(
     intent_tag = llm_service.interpret_user_intent(query)
     
     logger.info(query);
+    
+    
     context = await get_context_for_intent(intent_tag, current_user.username)
     response = llm_service.generate_response(query, context)
+
+
     logger.info(response);
 
     return QueryResponse(response=response)
