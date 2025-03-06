@@ -59,6 +59,7 @@ class LLMService:
             )
             
             if response.choices and len(response.choices) > 0:
+                logger.info(response.choices[0].message.content)
                 return response.choices[0].message.content
             else:
                 return "I'm sorry, I couldn't generate a response. Please try again."
