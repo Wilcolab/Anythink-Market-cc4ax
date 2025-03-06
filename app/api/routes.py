@@ -8,6 +8,11 @@ from app.database.db_manager import (
 )
 from app.models.llm_service import LLMService
 from fastapi.security import OAuth2PasswordBearer
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 llm_service = LLMService()
@@ -40,13 +45,11 @@ async def secure_query(
     
     intent_tag = llm_service.interpret_user_intent(query)
     
-    if current_user:
-        context = await get_context_for_intent(intent_tag, current_user.username)
-    else:
-        context = await get_context_for_intent(intent_tag, None)
-    
+    logger.info(query)
+    context = await get_context_for_intent(intent_tag, current_user.username)
     response = llm_service.generate_response(query, context)
-    
+    logger.info(response)
+
     return QueryResponse(response=response)
 
 async def get_context_for_intent(intent_tag: str, username: str = None) -> str:
