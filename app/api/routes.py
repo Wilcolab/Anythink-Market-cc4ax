@@ -13,6 +13,7 @@ import logging
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+import re
 router = APIRouter()
 
 llm_service = LLMService()
@@ -36,20 +37,27 @@ async def get_optional_user(authorization: Optional[str] = Header(None)):
     
     return None
 
+
+
+def sanitize_user_input(user_input):
+    """Cleanse user input to prevent injection attacks."""
+    pattern = r'(?i)(select|update|delete|insert|drop|alter)'
+    sanitized = re.sub(pattern, "", user_input)
+    return sanitized
+
+
 @router.post("/secure-query", response_model=QueryResponse)
 async def secure_query(
     request: QueryRequest,
     current_user: Optional[User] = Depends(get_optional_user)
 ):
     query = request.query
-    
+    query = sanitize_user_input(query)
+
     intent_tag = llm_service.interpret_user_intent(query)
     
-    if current_user:
-        context = await get_context_for_intent(intent_tag, current_user.username)
-    else:
-        context = await get_context_for_intent(intent_tag, None)
     logger.info(query);
+    context = await get_context_for_intent(intent_tag, current_user.username)
     response = llm_service.generate_response(query, context)
     
     return QueryResponse(response=response)
