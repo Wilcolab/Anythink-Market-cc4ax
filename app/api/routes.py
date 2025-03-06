@@ -50,10 +50,7 @@ async def secure_query(
 
     intent_tag = llm_service.interpret_user_intent(query)
     
-    if current_user:
-        context = await get_context_for_intent(intent_tag, current_user.username)
-    else:
-        context = await get_context_for_intent(intent_tag, None)
+    context = await get_context_for_intent(intent_tag, current_user.username)
     
     response = llm_service.generate_response(query, context)
     

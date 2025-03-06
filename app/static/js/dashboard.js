@@ -6,6 +6,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const token = localStorage.getItem("accessToken");
 
+  if(!token) {
+    window.location.replace('/login');
+    return;
+  }
+
   if (token) {
     fetchUserInfo(token);
   } else {
