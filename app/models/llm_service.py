@@ -67,6 +67,14 @@ class LLMService:
             print(f"Error generating response: {str(e)}")
             return f"I'm sorry, there was an error processing your request: {str(e)}"
     
+    def context_filter(self, response):
+        """Analyze and filter response based on sentiment or keywords."""
+        analysis = sentiment_analyzer(response)
+        for result in analysis:
+            if result['label'] == 'NEGATIVE' and result['score'] > 0.75:
+                return "[Filtered due to negative sentiment]"
+        return response
+
     def classify_intent(self, query, candidate_labels):
         """Classify the intent of the user query using Azure OpenAI"""
         try:
