@@ -69,11 +69,23 @@ class LLMService:
     
     def context_filter(self, response):
         """Analyze and filter response based on sentiment or keywords."""
+        logger.info(response)
         analysis = sentiment_analyzer(response)
+        logger.info(analysis)
         for result in analysis:
-            if result['label'] == 'NEGATIVE' and result['score'] > 0.75:
+            if result['label'] == 'NEGATIVE' and result['score'] > 0.9:
                 return "[Filtered due to negative sentiment]"
         return response
+    def redact_sensitive_data(self, text):
+        """Redact sensitive information from text."""
+        patterns = {
+        'credit_card': r'\b(?:\d[ -]*?){13,16}\b',
+        'email': r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+        }
+        
+        for key, pattern in patterns.items():
+            text = re.sub(pattern, f'[REDACTED {key}]', text)
+        return text
 
     def classify_intent(self, query, candidate_labels):
         """Classify the intent of the user query using Azure OpenAI"""
