@@ -1,0 +1,52 @@
+name: Bug Report
+description: Report a bug in the AI support bot
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees:
+  - ${user.login}
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this AI bot issue!
+  - type: input
+    id: affected-page
+    attributes:
+      label: Affected Page
+      description: Which page were you on when you encountered the slow response?
+      placeholder: ex. /product/support
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the issue and what you expected to happen
+      placeholder: The AI bot took X seconds to respond...
+    validations:
+      required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      description: What browser were you using?
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Microsoft Edge
+    validations:
+      required: true
+  - type: textarea
+    id: response-logs
+    attributes:
+      label: Response Time Logs
+      description: If available, paste any response time logs
+      render: shell
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have included all relevant information about this bug
+          required: true
