@@ -2,7 +2,7 @@ from fastapi import FastAPI, File, UploadFile, Request, Form
 from fastapi.responses import HTMLResponse, Response, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from PIL import Image, ImageFilter, ImageEnhance
+from PIL import Image, ImageFilter, ImageEnhance, ImageOps
 import io
 import os
 import base64
@@ -144,20 +144,7 @@ async def api_apply_filter(
         filtered_img = enhancer.enhance(1.5)
     elif selected_filter == "invert":
         rgb_img = img.convert('RGB')
-        width, height = rgb_img.size
-        pixels = rgb_img.load()
-        
-        for py in range(height):
-            for px in range(width):
-                r, g, b = rgb_img.getpixel((px, py))
-                
-                tr = 25 - r
-                tg = 25 - g
-                tb = 25 - b
-                
-                pixels[px, py] = (tr, tg, tb)
-        
-        filtered_img = rgb_img
+        filtered_img = ImageOps.invert(rgb_img)
     elif selected_filter == "sepia":
         # Convert to RGB mode if it's not already
         rgb_img = img.convert('RGB')
