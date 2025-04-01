@@ -2,13 +2,14 @@ from fastapi import FastAPI, File, UploadFile, Request, Form
 from fastapi.responses import HTMLResponse, Response, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from PIL import Image, ImageFilter, ImageEnhance, ImageOps
+from PIL import Image, ImageFilter, ImageEnhance
 import io
 import os
 import base64
 from pathlib import Path
 import uuid
 import uvicorn
+import random
 
 # Get the base directory using the current file's location
 BASE_DIR = Path(__file__).resolve().parent
@@ -38,7 +39,10 @@ FILTERS = {
     "brightness": "Increase brightness",
     "contrast": "Increase contrast",
     "invert": "Invert colors",
-    "sepia": "Sepia tone effect"
+    "sepia": "Sepia tone effect",
+    "black_and_white": "High contrast black and white effect",
+    "vintage": "Nostalgic vintage look with warm tones",
+    "glitch": "Digital glitch art effect"
 }
 
 @app.get("/", response_class=HTMLResponse)
@@ -120,7 +124,86 @@ async def api_apply_filter(
     img = Image.open(io.BytesIO(img_data))
     
     # Apply the selected filter
-    if selected_filter == "grayscale":
+    if selected_filter == "black_and_white":
+        # Convert to grayscale first
+        grayscale = img.convert("L")
+        # Apply threshold for high contrast B&W
+        threshold = 128
+        filtered_img = grayscale.point(lambda x: 255 if x > threshold else 0, '1').convert("RGB")
+    
+    elif selected_filter == "vintage":
+        # Convert to RGB mode
+        rgb_img = img.convert('RGB')
+        
+        # Adjust color balance for vintage look
+        r, g, b = rgb_img.split()
+        r = r.point(lambda i: i * 1.3)  # Increase red
+        b = b.point(lambda i: i * 0.8)  # Decrease blue
+        
+        # Merge channels back
+        filtered_img = Image.merge('RGB', (r, g, b))
+        
+        # Add slight sepia tone
+        width, height = filtered_img.size
+        pixels = filtered_img.load()
+        for py in range(height):
+            for px in range(width):
+                r, g, b = filtered_img.getpixel((px, py))
+                tr = min(int(r * 1.2), 255)
+                tg = min(int(g * 0.9), 255)
+                tb = min(int(b * 0.8), 255)
+                pixels[px, py] = (tr, tg, tb)
+        
+        # Add slight blur for dreamy effect
+        filtered_img = filtered_img.filter(ImageFilter.GaussianBlur(radius=0.5))
+        
+        # Reduce contrast slightly
+        enhancer = ImageEnhance.Contrast(filtered_img)
+        filtered_img = enhancer.enhance(0.85)
+    
+    elif selected_filter == "glitch":
+        # Convert to RGB
+        rgb_img = img.convert('RGB')
+        width, height = rgb_img.size
+        
+        # Create separate channels
+        r, g, b = rgb_img.split()
+        
+        # Shift channels randomly
+        shift_range = 10
+        r = r.transform(rgb_img.size, Image.AFFINE, (1, 0, random.randint(-shift_range, shift_range), 0, 1, 0))
+        b = b.transform(rgb_img.size, Image.AFFINE, (1, 0, random.randint(-shift_range, shift_range), 0, 1, 0))
+        
+        # Add random blocks of distortion
+        pixels = rgb_img.load()
+        num_blocks = random.randint(3, 7)
+        for _ in range(num_blocks):
+            # Random block position and size
+            block_x = random.randint(0, width - 50)
+            block_y = random.randint(0, height - 20)
+            block_w = random.randint(30, 100)
+            block_h = random.randint(5, 20)
+            
+            # Shift block pixels
+            shift_amount = random.randint(5, 20)
+            for y in range(block_y, min(block_y + block_h, height)):
+                for x in range(block_x, min(block_x + block_w, width)):
+                    if x + shift_amount < width:
+                        pixels[x, y] = pixels[x + shift_amount, y]
+        
+        # Merge channels with offset
+        filtered_img = Image.merge('RGB', (r, g, b))
+        
+        # Add some noise
+        pixels = filtered_img.load()
+        for y in range(height):
+            if random.random() < 0.05:  # 5% of rows
+                shift = random.randint(-10, 10)
+                for x in range(width):
+                    if x + shift >= 0 and x + shift < width:
+                        pixels[x, y] = pixels[x + shift, y]
+    
+    elif selected_filter == "grayscale":
         filtered_img = img.convert("L").convert("RGB")
     elif selected_filter == "blur":
         filtered_img = img.filter(ImageFilter.BLUR)
@@ -144,7 +227,20 @@ async def api_apply_filter(
         filtered_img = enhancer.enhance(1.5)
     elif selected_filter == "invert":
         rgb_img = img.convert('RGB')
-        filtered_img = ImageOps.invert(rgb_img)
+        width, height = rgb_img.size
+        pixels = rgb_img.load()
+        
+        for py in range(height):
+            for px in range(width):
+                r, g, b = rgb_img.getpixel((px, py))
+                
+                tr = 25 - r
+                tg = 25 - g
+                tb = 25 - b
+                
+                pixels[px, py] = (tr, tg, tb)
+        
+        filtered_img = rgb_img
     elif selected_filter == "sepia":
         # Convert to RGB mode if it's not already
         rgb_img = img.convert('RGB')

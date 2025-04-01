@@ -5,7 +5,10 @@ A modern web application that allows you to upload images and apply various filt
 ## Features
 
 - Easy image upload with drag-and-drop support
-- 12 different image filters including:
+- 15 different image filters including:
+  - Black & White (high contrast)
+  - Vintage look
+  - Digital Glitch effect
   - Grayscale
   - Blur
   - Emboss
