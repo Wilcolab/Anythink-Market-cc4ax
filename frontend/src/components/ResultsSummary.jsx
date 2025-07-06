@@ -1,4 +1,5 @@
 import React from 'react'
+import SocialShareButtons from './SocialShareButtons'
 
 const ResultsSummary = ({ results, onRestart }) => {
   const { score, total, percentage, results: questionResults } = results
@@ -120,7 +121,7 @@ const ResultsSummary = ({ results, onRestart }) => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
           <button
             onClick={onRestart}
             className="btn-primary text-lg px-8 py-4"
@@ -142,6 +143,15 @@ const ResultsSummary = ({ results, onRestart }) => {
           >
             📤 Share Score
           </button>
+        </div>
+
+        {/* Social Media Sharing */}
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 mb-6">
+          <SocialShareButtons 
+            score={score} 
+            total={total} 
+            percentage={percentage} 
+          />
         </div>
 
         {/* Fun Stats */}
