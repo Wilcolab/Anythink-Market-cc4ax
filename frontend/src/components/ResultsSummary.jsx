@@ -146,7 +146,7 @@ const ResultsSummary = ({ results, onRestart }) => {
         </div>
 
         {/* Social Media Sharing */}
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 mb-6">
+        <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-2xl p-8 mb-6 border border-purple-100">
           <SocialShareButtons 
             score={score} 
             total={total} 
