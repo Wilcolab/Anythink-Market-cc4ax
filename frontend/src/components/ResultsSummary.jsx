@@ -1,4 +1,5 @@
 import React from 'react'
+import SocialShareButtons from './SocialShareButtons'
 
 const ResultsSummary = ({ results, onRestart }) => {
   const { score, total, percentage, results: questionResults } = results
@@ -120,28 +121,25 @@ const ResultsSummary = ({ results, onRestart }) => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
           <button
             onClick={onRestart}
             className="btn-primary text-lg px-8 py-4"
           >
             🔄 Try Again
           </button>
-          
-          <button
-            onClick={() => {
-              const text = `I just scored ${score}/${total} (${percentage}%) on the 90s Fun Quiz! 🎉`;
-              if (navigator.share) {
-                navigator.share({ text });
-              } else {
-                navigator.clipboard.writeText(text);
-                alert('Score copied to clipboard!');
-              }
-            }}
-            className="btn-secondary text-lg px-8 py-4"
-          >
-            📤 Share Score
-          </button>
+        </div>
+
+        {/* Social Media Sharing */}
+        <div className="mb-8">
+          <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+            📤 Share Your Results
+          </h3>
+          <SocialShareButtons 
+            score={score} 
+            total={total} 
+            percentage={percentage} 
+          />
         </div>
 
         {/* Fun Stats */}
